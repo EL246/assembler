@@ -13,7 +13,6 @@ class Parser {
     private File file;
     private List<String> linesToAdd;
     private SymbolTable symbolTable;
-    private boolean parseOnlyLabels;
     private int lineCount = -1;
 
     Parser(String filePath) {
@@ -23,38 +22,40 @@ class Parser {
     }
 
     List<String> parse(boolean parseOnlyLabels) throws FileNotFoundException {
-        this.parseOnlyLabels = parseOnlyLabels;
-        parse();
+        Scanner scanner = new Scanner(file);
+        while (scanner.hasNextLine()) {
+            parseLine(scanner.nextLine(), parseOnlyLabels);
+        }
         return linesToAdd;
     }
 
-    private void parse() throws FileNotFoundException {
-        Scanner scanner = new Scanner(file);
-        while (scanner.hasNextLine()) {
-            parseLine(scanner.nextLine());
-        }
-    }
-
-    private void parseLine(String line) {
+    private void parseLine(String line, boolean parseOnlyLabels) {
         line = removeEmptyOrCommentedLines(line);
 
         if (!line.isEmpty()) {
-            CommandType commandType = CommandParser.getCommandType(line);
-            boolean isLCommand = commandType.equals(CommandType.L_COMMAND);
-
-            if (parseOnlyLabels) {
-                parseLabelCommand(line, isLCommand);
-            } else {
-                System.out.println("original line: " + line);
-                parseBinaryCommand(line, isLCommand);
-            }
+            processLine(line, parseOnlyLabels);
         }
+    }
+
+    private void processLine(String line, boolean parseOnlyLabels) {
+        boolean isLCommand = isLCommand(line);
+
+        if (parseOnlyLabels) {
+            parseLabelCommand(line, isLCommand);
+        } else {
+            parseBinaryCommand(line, isLCommand);
+        }
+    }
+
+    private boolean isLCommand(String line) {
+        CommandType commandType = CommandParser.getCommandType(line);
+        return commandType.equals(CommandType.L_COMMAND);
     }
 
     private void parseBinaryCommand(String line, boolean isLCommand) {
         if (!isLCommand) {
             String newLine = CommandParser.parseCommand(line, symbolTable);
-            System.out.println("binary line: " + newLine);
+            System.out.println(newLine);
             linesToAdd.add(newLine);
         }
     }
