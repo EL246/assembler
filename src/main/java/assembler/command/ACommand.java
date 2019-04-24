@@ -3,7 +3,9 @@ package main.java.assembler.command;
 import main.java.assembler.file.SymbolTable;
 
 public class ACommand implements Command {
-    private static int n = 16;
+    private static int newRegisterValue = 16;
+    private static int registerBits = 16;
+    
     private String line;
 
     public ACommand(String line) {
@@ -34,9 +36,9 @@ public class ACommand implements Command {
 
     private int addToSymbolTable(SymbolTable symbols) {
         int value;
-        value = n;
-        symbols.addSymbol(line, n);
-        n++;
+        value = newRegisterValue;
+        symbols.addSymbol(line, newRegisterValue);
+        newRegisterValue++;
         return value;
     }
 
@@ -47,7 +49,7 @@ public class ACommand implements Command {
 
     private String getBinaryValue(Integer value) {
         StringBuilder bin = new StringBuilder(Integer.toBinaryString(value));
-        while (bin.length() < 16) {
+        while (bin.length() < registerBits) {
             bin.insert(0, "0");
         }
         return bin.toString();
