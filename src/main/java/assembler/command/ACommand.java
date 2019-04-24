@@ -2,7 +2,7 @@ package main.java.assembler.command;
 
 import main.java.assembler.file.SymbolTable;
 
-public class ACommand implements Command{
+public class ACommand implements Command {
     private static int n = 16;
     private String line;
 
@@ -12,30 +12,42 @@ public class ACommand implements Command{
 
     @Override
     public String processAndGetValue(SymbolTable symbols) {
-        processLine();
+        removeExtraCharacters();
         int value;
         try {
             value = Short.parseShort(line);
-        } catch (NumberFormatException e){
-            if(symbols.getSymbol(line)==null){
-                value = n;
-                symbols.addSymbol(line, n);
-                n++;
-            } else {
-                value = symbols.getSymbol(line);
-            }
+        } catch (NumberFormatException e) {
+            value = checkOrUpdateSymbolTable(symbols);
         }
-        return getValue(value);
+        return getBinaryValue(value);
     }
 
-    private void processLine() {
+    private int checkOrUpdateSymbolTable(SymbolTable symbols) {
+        int value;
+        if (symbols.getSymbol(line) == null) {
+            value = addToSymbolTable(symbols);
+        } else {
+            value = symbols.getSymbol(line);
+        }
+        return value;
+    }
+
+    private int addToSymbolTable(SymbolTable symbols) {
+        int value;
+        value = n;
+        symbols.addSymbol(line, n);
+        n++;
+        return value;
+    }
+
+    private void removeExtraCharacters() {
         StringBuilder stringBuilder = new StringBuilder(line);
         line = stringBuilder.deleteCharAt(0).toString();
     }
 
-    private String getValue(Integer value) {
+    private String getBinaryValue(Integer value) {
         StringBuilder bin = new StringBuilder(Integer.toBinaryString(value));
-        while (bin.length() < 16){
+        while (bin.length() < 16) {
             bin.insert(0, "0");
         }
         return bin.toString();
