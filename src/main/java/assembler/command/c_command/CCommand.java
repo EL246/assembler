@@ -1,5 +1,6 @@
-package main.java.assembler.command;
+package main.java.assembler.command.c_command;
 
+import main.java.assembler.command.Command;
 import main.java.assembler.file.SymbolTable;
 
 public class CCommand implements Command {
@@ -15,24 +16,20 @@ public class CCommand implements Command {
 
     @Override
     public String processAndGetValue(SymbolTable symbols) {
-        line = line.replace(" ", "");
+        line = line.replaceAll("\\s+", "");
         parseSections();
         return combineSectionsToBinary();
     }
 
     private String combineSectionsToBinary() {
-        String s = "111" + "111" +
+        return "111" +
                 (isaVal() ? 1 : 0) +
                 CalcVal.getVal(comp) +
                 DestVal.getDest(dest) +
                 JumpVal.valueOf(jump).getVal();
-        return s;
     }
 
     private void parseSections() {
-        setDest();
-
-
         String j = setDest();
         String a = setJump(j);
         setA(a);
@@ -51,10 +48,10 @@ public class CCommand implements Command {
         String[] values = s.split(";");
         if (values.length == 1) {
             jump = "DEFAULT";
-            return values[0].replace(" ","");
+            return values[0];
         } else {
-            jump = values[1].replace(" ","");
-            return values[0].replace(" ","");
+            jump = values[1];
+            return values[0];
         }
     }
 
@@ -67,18 +64,6 @@ public class CCommand implements Command {
             dest = values[0];
             return values[1];
         }
-    }
-
-    private String getDest() {
-        return dest;
-    }
-
-    public String getJump() {
-        return jump;
-    }
-
-    private String getComp() {
-        return comp;
     }
 
     private boolean isaVal() {

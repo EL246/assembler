@@ -1,7 +1,7 @@
 package main.java.assembler;
 
 import main.java.assembler.command.ACommand;
-import main.java.assembler.command.CCommand;
+import main.java.assembler.command.c_command.CCommand;
 import main.java.assembler.command.Command;
 import main.java.assembler.command.LCommand;
 

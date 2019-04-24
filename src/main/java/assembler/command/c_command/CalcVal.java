@@ -1,4 +1,4 @@
-package main.java.assembler.command;
+package main.java.assembler.command.c_command;
 
 import java.util.HashMap;
 import java.util.Map;

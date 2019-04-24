@@ -1,7 +1,6 @@
 package main.java.assembler.file;
 
 import main.java.assembler.CommandParser;
-import main.java.assembler.CommandType;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -38,26 +37,18 @@ class Parser {
     }
 
     private void processLine(String line, boolean parseOnlyLabels) {
-        boolean isLCommand = isLCommand(line);
+        boolean isLCommand = CommandParser.isLCommand(line);
 
         if (parseOnlyLabels) {
             parseLabelCommand(line, isLCommand);
-        } else {
-            parseBinaryCommand(line, isLCommand);
+        } else if (!isLCommand) {
+            parseBinaryCommand(line);
         }
     }
 
-    private boolean isLCommand(String line) {
-        CommandType commandType = CommandParser.getCommandType(line);
-        return commandType.equals(CommandType.L_COMMAND);
-    }
-
-    private void parseBinaryCommand(String line, boolean isLCommand) {
-        if (!isLCommand) {
-            String newLine = CommandParser.parseCommand(line, symbolTable);
-            System.out.println(newLine);
-            linesToAdd.add(newLine);
-        }
+    private void parseBinaryCommand(String line) {
+        String newLine = CommandParser.parseCommand(line, symbolTable);
+        linesToAdd.add(newLine);
     }
 
     private void parseLabelCommand(String line, boolean isLCommand) {
