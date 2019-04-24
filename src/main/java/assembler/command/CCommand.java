@@ -1,6 +1,6 @@
 package main.java.assembler.command;
 
-import java.util.HashMap;
+import main.java.assembler.file.SymbolTable;
 
 public class CCommand implements Command {
     private String line;
@@ -14,21 +14,19 @@ public class CCommand implements Command {
     }
 
     @Override
-    public String processAndGetValue(HashMap<String, Integer> symbols) {
+    public String processAndGetValue(SymbolTable symbols) {
         line = line.replace(" ", "");
         parseSections();
         return combineSectionsToBinary();
     }
 
     private String combineSectionsToBinary() {
-        StringBuilder s = new StringBuilder();
-        s.append("111");
-        s.append(isaVal() ? 1 : 0);
-        s.append(CalcVal.getVal(comp));
-        s.append(DestVal.getDest(dest));
-        s.append(JumpVal.valueOf(jump).getVal());
-
-        return s.toString();
+        String s = "111" + "111" +
+                (isaVal() ? 1 : 0) +
+                CalcVal.getVal(comp) +
+                DestVal.getDest(dest) +
+                JumpVal.valueOf(jump).getVal();
+        return s;
     }
 
     private void parseSections() {

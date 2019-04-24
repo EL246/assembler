@@ -1,8 +1,8 @@
 package main.java.assembler.command;
 
-import java.util.HashMap;
+import main.java.assembler.file.SymbolTable;
 
 public interface Command {
 
-    String processAndGetValue(HashMap<String, Integer> symbols);
+    String processAndGetValue(SymbolTable symbols);
 }

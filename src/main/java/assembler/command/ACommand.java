@@ -1,6 +1,6 @@
 package main.java.assembler.command;
 
-import java.util.HashMap;
+import main.java.assembler.file.SymbolTable;
 
 public class ACommand implements Command{
     private static int n = 16;
@@ -8,23 +8,21 @@ public class ACommand implements Command{
 
     public ACommand(String line) {
         this.line = line;
-//        n = 16;
     }
 
     @Override
-    public String processAndGetValue(HashMap<String, Integer> symbols) {
+    public String processAndGetValue(SymbolTable symbols) {
         processLine();
         int value;
         try {
             value = Short.parseShort(line);
         } catch (NumberFormatException e){
-            if(symbols.get(line)==null){
+            if(symbols.getSymbol(line)==null){
                 value = n;
-                symbols.put(line, n);
+                symbols.addSymbol(line, n);
                 n++;
             } else {
-                value = symbols.get(line);
-                System.out.println("Value of " + line + " is " + value);
+                value = symbols.getSymbol(line);
             }
         }
         return getValue(value);
@@ -36,10 +34,10 @@ public class ACommand implements Command{
     }
 
     private String getValue(Integer value) {
-        String bin = Integer.toBinaryString(value);
+        StringBuilder bin = new StringBuilder(Integer.toBinaryString(value));
         while (bin.length() < 16){
-            bin = "0" + bin;
+            bin.insert(0, "0");
         }
-        return bin;
+        return bin.toString();
     }
 }

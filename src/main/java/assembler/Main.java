@@ -1,5 +1,7 @@
 package main.java.assembler;
 
+import main.java.assembler.file.FileHandler;
+
 import java.io.IOException;
 
 public class Main {

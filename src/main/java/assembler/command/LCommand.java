@@ -1,6 +1,6 @@
 package main.java.assembler.command;
 
-import java.util.HashMap;
+import main.java.assembler.file.SymbolTable;
 
 public class LCommand implements Command {
     private String line;
@@ -12,7 +12,7 @@ public class LCommand implements Command {
     }
 
     @Override
-    public String processAndGetValue(HashMap<String, Integer> symbols) {
+    public String processAndGetValue(SymbolTable symbols) {
         return line;
     }
 }

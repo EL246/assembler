@@ -1,31 +1,30 @@
 package main.java.assembler;
 
 import main.java.assembler.command.Command;
+import main.java.assembler.file.SymbolTable;
 
-import java.util.HashMap;
+public class CommandParser {
 
-class CommandParser {
-
-    static CommandType getCommandType(String line) {
+    public static CommandType getCommandType(String line) {
         System.out.println("first character: " + line.charAt(0));
         switch (line.charAt(0)) {
             case '@':
-                return CommandType.ACOMMAND;
+                return CommandType.A_COMMAND;
             case '(':
-                return CommandType.LCOMMAND;
+                return CommandType.L_COMMAND;
             default:
-                return CommandType.CCOMMAND;
+                return CommandType.C_COMMAND;
         }
     }
 
-    static void parseLabel(String line, HashMap<String, Integer> symbols, int lineCount) {
-        String label = CommandFactory.getCommand(line, CommandType.LCOMMAND, symbols).processAndGetValue(symbols);
-        symbols.put(label, lineCount + 1);
+    public static void parseLabel(String line, SymbolTable symbols, int lineCount) {
+        String label = CommandFactory.getCommand(line, CommandType.L_COMMAND).processAndGetValue(symbols);
+        symbols.addSymbol(label, lineCount + 1);
     }
 
-    static String parseCommand(String line, HashMap<String, Integer> symbols) {
+    public static String parseCommand(String line, SymbolTable symbols) {
         CommandType commandType = getCommandType(line);
-        Command command = CommandFactory.getCommand(line, commandType, symbols);
+        Command command = CommandFactory.getCommand(line, commandType);
         return command.processAndGetValue(symbols);
     }
 }

@@ -5,27 +5,25 @@ import main.java.assembler.command.CCommand;
 import main.java.assembler.command.Command;
 import main.java.assembler.command.LCommand;
 
-import java.util.HashMap;
-
 public enum CommandType {
-    ACOMMAND {
+    A_COMMAND {
         @Override
-        Command getCommand(String line, HashMap<String, Integer> symbols){
+        Command getCommand(String line){
             return new ACommand(line);
         }
     },
-    CCOMMAND{
+    C_COMMAND {
         @Override
-        Command getCommand(String line, HashMap<String, Integer> symbols){
+        Command getCommand(String line){
             return new CCommand(line);
         }
     },
-    LCOMMAND {
+    L_COMMAND {
         @Override
-        Command getCommand(String line, HashMap<String, Integer> symbols){
+        Command getCommand(String line){
             return new LCommand(line);
         }
     };
 
-    abstract Command getCommand(String line, HashMap<String, Integer> symbols);
+    abstract Command getCommand(String line);
 }
